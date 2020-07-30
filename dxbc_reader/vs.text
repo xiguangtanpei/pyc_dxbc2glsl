@@ -1,50 +1,45 @@
 class INPUT {
 	POSITION;
-	TEXCOORD1;
 	NORMAL;
-	SV_VERTEXID;
-	SV_InstanceID;
+	TEXCOORD1;
+	COLOR;
 }
 class OUT {
-	TEXCOORD1;
-	TEXCOORD2;
-	TEXCOORD3;
 	SV_POSITION;
 }
 void main(INPUT in) {
-	            bitmask = (((1 << table: 00000000006b5f80)-1) << table: 00000000006b6040) & 0xffffffff
-            dest = ((table: 00000000006b5f00 << table: 00000000006b6040) & bitmask) | (table: 00000000006b62c0 & ~bitmask);
-	r0.w = 0x02000000 & cb11[r0.z + 0].w ;
-	r0.w = 1 < r0.w;
-	r0.w = r0.w ? 0 : in.SV_VERTEXID.x;
-	            bitmask = (((1 << table: 00000000006b9bf0)-1) << table: 00000000006b9db0) & 0xffffffff
-            dest = ((table: 00000000006b95f0 << table: 00000000006b9db0) & bitmask) | (table: 00000000006b9670 & ~bitmask);
-	r0.w = r0.w + r1.x;
-	r0.w = tex2D(t0, r0.ww).x //ld_indexable;
-	out.TEXCOORD0.w = r0.w;
-	r0.w = in.SV_InstanceID.x << 2;
-	r1.x = dot(cb11[r0.w + 0].xyzx, in.NORMAL.xyzx);
-	r1.y = dot(cb11[r0.x + 0].xyzx, in.NORMAL.xyzx);
-	r1.z = dot(cb11[r0.y + 0].xyzx, in.NORMAL.xyzx);
-	r1.w = dot(r1.xyzx, r1.xyzx);
-	r1.w = rsqrt(r1.w);
-	out.TEXCOORD0.xyz = r1.www * r1.xyz;
-	out.TEXCOORD1.xy = in.TEXCOORD1.xy*cb11[r0.z + 0].xx + cb11[r0.z + 0].yz;
-	r1.w = -cb12[7].x + cb11[r0.w + 0].w;
-	r1.xyz = cb11[r0.w + 0].xyz;
-	r2.xyz = in.POSITION.xyz;
-	r2.w = 1.0;
-	r1.x = dot(r1.xyzw, r2.xyzw);
-	r3.w = -cb12[7].y + cb11[r0.x + 0].w;
-	r3.xyz = cb11[r0.x + 0].xyz;
-	r1.y = dot(r3.xyzw, r2.xyzw);
-	r3.w = -cb12[7].z + cb11[r0.y + 0].w;
-	r3.xyz = cb11[r0.y + 0].xyz;
-	r1.z = dot(r3.xyzw, r2.xyzw);
-	out.TEXCOORD2.xyz = r1.xyz + cb12[7].xyz;
-	r0.xyzw = r1.yyyy * cb12[1].xyzw;
-	r0.xyzw = cb12[0].xyzw*r1.xxxx + r0.xyzw;
-	r0.xyzw = cb12[2].xyzw*r1.zzzz + r0.xyzw;
-	out.SV_POSITION.xyzw = r0.xyzw + cb12[13].xyzw;
+	r0.x = dot(in.NORMAL.xyzx, cb2[4].xyzx);
+	r0.y = dot(in.NORMAL.xyzx, cb2[5].xyzx);
+	r0.z = dot(in.NORMAL.xyzx, cb2[6].xyzx);
+	r0.w = dot(r0.xyzx, r0.xyzx);
+	r0.w = rsqrt(r0.w);
+	r0.xyz = r0.www * r0.xyz;
+	r1.xyzw = in.POSITION.yyyy * cb2[1].xyzw;
+	r1.xyzw = cb2[0].xyzw*in.POSITION.xxxx + r1.xyzw;
+	r1.xyzw = cb2[2].xyzw*in.POSITION.zzzz + r1.xyzw;
+	r1.xyzw = cb2[3].xyzw*in.POSITION.wwww + r1.xyzw;
+	r2.xyz = -r1.xyz*cb0[0].www + cb0[0].xyz;
+	r0.w = dot(r2.xyzx, r2.xyzx);
+	r0.w = rsqrt(r0.w);
+	r2.xyz = r0.www * r2.xyz;
+	r0.w = dot(r0.xyzx, r2.xyzx);
+	r0.w = -r0.w*r0.w + 1.0;
+	r0.w = sqrt(r0.w);
+	r0.w = r0.w * cb1[5].z;
+	r0.xyz = -r0.xyz*r0.www + r1.xyz;
+	r0.w = cb1[5].z != 0.0;
+	r0.xyz = r0.www ? r0.xyz : r1.xyz;
+	r2.xyzw = r0.yyyy * cb3[18].xyzw;
+	r2.xyzw = cb3[17].xyzw*r0.xxxx + r2.xyzw;
+	r0.xyzw = cb3[19].xyzw*r0.zzzz + r2.xyzw;
+	r0.xyzw = cb3[20].xyzw*r1.wwww + r0.xyzw;
+	r1.x = cb1[5].x/r0.w;
+	r1.x = min(r1.x, 0.0);
+	r1.x = max(r1.x, -1.0);
+	r0.z = r0.z + r1.x;
+	r1.x = min(r0.w, r0.z);
+	out.SV_POSITION.xyw = r0.xyw;
+	r0.x = -r0.z + r1.x;
+	out.SV_POSITION.z = cb1[5].y*r0.x + r0.z;
 	return;
 }
