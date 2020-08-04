@@ -1,0 +1,50 @@
+class SceneInfo{
+	float4x4	viewProjMat;
+	float3x4	transposeViewMat;
+	float3x4	transposeViewInvMat;
+	float4	projElement;
+	float4	projInvElements;
+	float4x4	viewProjInvMat;
+	float4x4	prevViewProjMat;
+	float3	ZToLinear;
+	float	subdivisionLevel;
+	float2	screenSize;
+	float2	screenInverseSize;
+	float2	cullingHelper;
+	float	cameraNearPlane;
+	float	cameraFarPlane;
+	float4	viewFrustum;
+	float4	clipplane;
+}
+class INPUT {
+	POSITION;
+	POSITION;
+	NORMAL;
+	TANGENT;
+	TEXCOORD1;
+	Texcoord;
+}
+class OUT {
+	SV_POSITION;
+	INTERPOLATOR;
+	INTERPOLATOR;
+	INTERPOLATOR;
+	INTERPOLATOR;
+}
+void main(INPUT in) {
+	r0.xyzw = in.POSITION.yyyy * SceneInfo.viewProjMat[1].xyzw;
+	r0.xyzw = in.POSITION.xxxx*SceneInfo.viewProjMat[0].xyzw + r0.xyzw;
+	r0.xyzw = in.POSITION.zzzz*SceneInfo.viewProjMat[2].xyzw + r0.xyzw;
+	out.SV_POSITION.xyzw = r0.xyzw + SceneInfo.viewProjMat[3].xyzw;
+	out.INTERPOLATOR.xyz = in.NORMAL.xyz;
+	out.INTERPOLATOR.w = in.TEXCOORD4.x;
+	out.INTERPOLATOR.x = in.TEXCOORD4.y;
+	out.INTERPOLATOR.yzw = in.TANGENT.xyz;
+	out.INTERPOLATOR.x = in.TANGENT.w;
+	out.INTERPOLATOR.yzw = in.POSITION.xyz;
+	r0.xyz = in.POSITION.yyy * SceneInfo.prevViewProjMat[1].xyw;
+	r0.xyz = in.POSITION.xxx*SceneInfo.prevViewProjMat[0].xyw + r0.xyz;
+	r0.xyz = in.POSITION.zzz*SceneInfo.prevViewProjMat[2].xyw + r0.xyz;
+	out.INTERPOLATOR.xyz = r0.xyz + SceneInfo.prevViewProjMat[3].xyw;
+	return;
+}

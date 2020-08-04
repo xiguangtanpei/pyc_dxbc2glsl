@@ -2,27 +2,27 @@ class INPUT {
 	SV_POSITION;
 	TEXCOORD1;
 	TEXCOORD2;
-	COLOR;
+	TEXCOORD3;
+	TEXCOORD4;
+	TEXCOORD5;
 }
 class OUT {
 	SV_Target;
 }
 void main(INPUT in) {
-	r0.xyzw = cb0[3].xyzw + cb0[3].xyzw;
-	r0.xyzw = r0.xyzw * cb0[4].xyzw;
-	r1.x = -in.TEXCOORD1.z + 1.0;
-	r0.xyzw = r0.xyzw * r1.xxxx;
-	r1.xyzw = tex2D(t0, in.TEXCOORD1.xy).xyzw //sample_state s0;
-	r1.xyzw = r1.xyzw * in.COLOR.xyzw;
-	r0.xyzw = r0.xyzw * r1.xyzw;
-	r1.x = r0.w*0.5-1.0;
-	r1.x = cb0[10].w*r1.x + 1.0;
-	r0.xyz = r0.xyz * r1.xxx;
-	r0.w = saturate(r0.w * cb0[10].z);
-	out.SV_Target.w = -r0.w + 1.0;
-	r1.xyz = cb0[11].xyz + float3(-1.0, -1.0, -1.0);
-	r1.xyz = cb0[10].yyy*r1.xyz + float3(1.0, 1.0, 1.0);
-	r0.xyz = r0.xyz * r1.xyz;
-	out.SV_Target.xyz = r0.xyz * cb0[17].yyy;
+	r0.xy = in.TEXCOORD1.xy*cb0[6].xy + cb0[6].zw;
+	r0.xyzw = tex2D(t0, r0.xy).xyzw //sample_state s0;
+	r0.xy = r0.wy*float2(2.0, 2.0) + float2(-1.0, -1.0);
+	r1.xyz = r0.yyy * in.TEXCOORD5.xyz;
+	r1.xyz = r0.xxx*in.TEXCOORD4.xyz + r1.xyz;
+	r0.x = dot(r0.xyxx, r0.xyxx);
+	r0.x = min(r0.x, 1.0);
+	r0.x = -r0.x + 1.0;
+	r0.x = sqrt(r0.x);
+	r0.xyz = r0.xxx*in.TEXCOORD3.xyz + r1.xyz;
+	r0.w = dot(r0.xyzx, r0.xyzx);
+	r0.w = rsqrt(r0.w);
+	out.SV_Target.xyz = r0.www * r0.xyz;
+	out.SV_Target.w = 1.0;
 	return;
 }

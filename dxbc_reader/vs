@@ -7,58 +7,78 @@
 // Name                 Index   Mask Register SysValue  Format   Used
 // -------------------- ----- ------ -------- -------- ------- ------
 // POSITION                 0   xyzw        0     NONE   float   xyzw
-// NORMAL                   0   xyz         1     NONE   float   xyz 
-// TEXCOORD                 0   xy          2     NONE   float       
-// COLOR                    0   xyzw        3     NONE   float       
+// TEXCOORD                 0   xy          1     NONE   float   xy  
+// NORMAL                   0   xyz         2     NONE   float   xyz 
+// TANGENT                  0   xyzw        3     NONE   float   xyzw
+// TEXCOORD                 2   xy          4     NONE   float   xy  
 //
 //
 // Output signature:
 //
 // Name                 Index   Mask Register SysValue  Format   Used
 // -------------------- ----- ------ -------- -------- ------- ------
-// SV_POSITION              0   xyzw        0      POS   float   xyzw
+// TEXCOORD                 0   xyzw        0     NONE   float   xyzw
+// TEXCOORD                 1   xyzw        1     NONE   float   xyzw
+// TEXCOORD                 2   xyz         2     NONE   float   xyz 
+// TEXCOORD                 3   xyzw        3     NONE   float   xyzw
+// TEXCOORD                 4   xyz         4     NONE   float   xyz 
+// SV_POSITION              0   xyzw        5      POS   float   xyzw
 //
-vs_4_0
-dcl_constantbuffer CB0[1], immediateIndexed
-dcl_constantbuffer CB1[6], immediateIndexed
-dcl_constantbuffer CB2[7], immediateIndexed
-dcl_constantbuffer CB3[21], immediateIndexed
+vs_5_0
+dcl_globalFlags refactoringAllowed
+dcl_constantbuffer CB12[14], immediateIndexed
+dcl_constantbuffer CB11[24], dynamicIndexed
 dcl_input v0.xyzw
-dcl_input v1.xyz
-dcl_output_siv o0.xyzw, position
-dcl_temps 3
-dp3 r0.x, v1.xyzx, cb2[4].xyzx
-dp3 r0.y, v1.xyzx, cb2[5].xyzx
-dp3 r0.z, v1.xyzx, cb2[6].xyzx
-dp3 r0.w, r0.xyzx, r0.xyzx
-rsq r0.w, r0.w
-mul r0.xyz, r0.wwww, r0.xyzx
-mul r1.xyzw, v0.yyyy, cb2[1].xyzw
-mad r1.xyzw, cb2[0].xyzw, v0.xxxx, r1.xyzw
-mad r1.xyzw, cb2[2].xyzw, v0.zzzz, r1.xyzw
-mad r1.xyzw, cb2[3].xyzw, v0.wwww, r1.xyzw
-mad r2.xyz, -r1.xyzx, cb0[0].wwww, cb0[0].xyzx
-dp3 r0.w, r2.xyzx, r2.xyzx
-rsq r0.w, r0.w
-mul r2.xyz, r0.wwww, r2.xyzx
-dp3 r0.w, r0.xyzx, r2.xyzx
-mad r0.w, -r0.w, r0.w, l(1.000000)
-sqrt r0.w, r0.w
-mul r0.w, r0.w, cb1[5].z
-mad r0.xyz, -r0.xyzx, r0.wwww, r1.xyzx
-ne r0.w, cb1[5].z, l(0.000000)
-movc r0.xyz, r0.wwww, r0.xyzx, r1.xyzx
-mul r2.xyzw, r0.yyyy, cb3[18].xyzw
-mad r2.xyzw, cb3[17].xyzw, r0.xxxx, r2.xyzw
-mad r0.xyzw, cb3[19].xyzw, r0.zzzz, r2.xyzw
-mad r0.xyzw, cb3[20].xyzw, r1.wwww, r0.xyzw
-div r1.x, cb1[5].x, r0.w
-min r1.x, r1.x, l(0.000000)
-max r1.x, r1.x, l(-1.000000)
-add r0.z, r0.z, r1.x
-min r1.x, r0.w, r0.z
-mov o0.xyw, r0.xyxw
-add r0.x, -r0.z, r1.x
-mad o0.z, cb1[5].y, r0.x, r0.z
+dcl_input v1.xy
+dcl_input v2.xyz
+dcl_input v3.xyzw
+dcl_input v4.xy
+dcl_output o0.xyzw
+dcl_output o1.xyzw
+dcl_output o2.xyz
+dcl_output o3.xyzw
+dcl_output o4.xyz
+dcl_output_siv o5.xyzw, position
+dcl_temps 5
+dp3 r0.x, v2.xyzx, v2.xyzx
+rsq r0.x, r0.x
+mul r0.xyz, r0.xxxx, v2.xyzx
+mad r0.w, v0.w, l(32767.000000), l(0.100000)
+ftou r0.w, r0.w
+imad r1.xy, l(3, 3, 0, 0), r0.wwww, l(1, 2, 0, 0)
+imul null, r0.w, r0.w, l(3)
+dp3 r2.z, cb11[r1.y + 8].xyzx, r0.xyzx
+mul_sat r1.z, r2.z, cb11[7].z
+add_sat o0.w, r1.z, cb11[7].w
+dp3 r2.x, cb11[r0.w + 8].xyzx, r0.xyzx
+dp3 r2.y, cb11[r1.x + 8].xyzx, r0.xyzx
+mov o0.xyz, r2.xyzx
+dp3 r0.x, cb11[r0.w + 8].xyzx, v3.xyzx
+dp3 r0.y, cb11[r1.x + 8].xyzx, v3.xyzx
+dp3 r0.z, cb11[r1.y + 8].xyzx, v3.xyzx
+mov o1.xyz, r0.xyzx
+mad r3.xyz, v0.xyzx, cb11[5].wwww, cb11[5].xyzx
+mov o1.w, r3.z
+mul r4.xyz, r0.yzxy, r2.zxyz
+mad r0.xyz, r2.yzxy, r0.zxyz, -r4.xyzx
+mul o2.xyz, r0.xyzx, v3.wwww
+mad r0.xy, v1.xyxx, cb11[6].xyxx, cb11[6].zwzz
+mul o3.zw, r0.xxxy, v4.xxxy
+mov o3.xy, r0.xyxx
+add r2.w, -cb12[7].x, cb11[r0.w + 8].w
+mov r2.xyz, cb11[r0.w + 8].xyzx
+mov r3.w, l(1.000000)
+dp4 r0.x, r2.xyzw, r3.xyzw
+add r2.w, -cb12[7].y, cb11[r1.x + 8].w
+mov r2.xyz, cb11[r1.x + 8].xyzx
+dp4 r0.y, r2.xyzw, r3.xyzw
+add r2.w, -cb12[7].z, cb11[r1.y + 8].w
+mov r2.xyz, cb11[r1.y + 8].xyzx
+dp4 r0.z, r2.xyzw, r3.xyzw
+add o4.xyz, r0.xyzx, cb12[7].xyzx
+mul r1.xyzw, r0.yyyy, cb12[1].xyzw
+mad r1.xyzw, cb12[0].xyzw, r0.xxxx, r1.xyzw
+mad r0.xyzw, cb12[2].xyzw, r0.zzzz, r1.xyzw
+add o5.xyzw, r0.xyzw, cb12[13].xyzw
 ret 
 // Approximately 0 instruction slots used

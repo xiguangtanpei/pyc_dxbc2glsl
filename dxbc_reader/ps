@@ -8,8 +8,10 @@
 // -------------------- ----- ------ -------- -------- ------- ------
 // SV_POSITION              0   xyzw        0      POS   float       
 // TEXCOORD                 0   xy          1     NONE   float   xy  
-// TEXCOORD                 1     z         1     NONE   float     z 
-// COLOR                    0   xyzw        2     NONE   float   xyzw
+// TEXCOORD                 1   xyzw        2     NONE   float       
+// TEXCOORD                 2   xyz         3     NONE   float   xyz 
+// TEXCOORD                 3   xyz         4     NONE   float   xyz 
+// TEXCOORD                 4   xyz         5     NONE   float   xyz 
 //
 //
 // Output signature:
@@ -18,30 +20,29 @@
 // -------------------- ----- ------ -------- -------- ------- ------
 // SV_Target                0   xyzw        0   TARGET   float   xyzw
 //
-ps_4_0
-dcl_constantbuffer CB0[18], immediateIndexed
-dcl_sampler s0, mode_default
-dcl_resource_texture2d (float,float,float,float) t0
-dcl_input_ps linear v1.xy
-dcl_input_ps linear v1.z
-dcl_input_ps linear v2.xyzw
-dcl_output o0.xyzw
-dcl_temps 2
-add r0.xyzw, cb0[3].xyzw, cb0[3].xyzw
-mul r0.xyzw, r0.xyzw, cb0[4].xyzw
-add r1.x, -v1.z, l(1.000000)
-mul r0.xyzw, r0.xyzw, r1.xxxx
-sample r1.xyzw, v1.xyxx, t0.xyzw, s0
-mul r1.xyzw, r1.xyzw, v2.xyzw
-mul r0.xyzw, r0.xyzw, r1.xyzw
-mad r1.x, r0.w, l(0.500000), l(-1.000000)
-mad r1.x, cb0[10].w, r1.x, l(1.000000)
-mul r0.xyz, r0.xyzx, r1.xxxx
-mul_sat r0.w, r0.w, cb0[10].z
-add o0.w, -r0.w, l(1.000000)
-add r1.xyz, cb0[11].xyzx, l(-1.000000, -1.000000, -1.000000, 0.000000)
-mad r1.xyz, cb0[10].yyyy, r1.xyzx, l(1.000000, 1.000000, 1.000000, 0.000000)
-mul r0.xyz, r0.xyzx, r1.xyzx
-mul o0.xyz, r0.xyzx, cb0[17].yyyy
-ret 
+ ps_4_0
+ dcl_constantbuffer CB0[7], immediateIndexed
+ dcl_sampler s0, mode_default
+ dcl_resource_texture2d (float,float,float,float) t0
+ dcl_input_ps linear v1.xy
+ dcl_input_ps linear v3.xyz
+ dcl_input_ps linear v4.xyz
+ dcl_input_ps linear v5.xyz
+ dcl_output o0.xyzw
+ dcl_temps 2
+ mad r0.xy, v1.xyxx, cb0[6].xyxx, cb0[6].zwzz
+ sample r0.xyzw, r0.xyxx, t0.xyzw, s0
+ mad r0.xy, r0.wyww, l(2.000000, 2.000000, 0.000000, 0.000000), l(-1.000000, -1.000000, 0.000000, 0.000000)
+ mul r1.xyz, r0.yyyy, v5.xyzx
+ mad r1.xyz, r0.xxxx, v4.xyzx, r1.xyzx
+ dp2 r0.x, r0.xyxx, r0.xyxx
+ min r0.x, r0.x, l(1.000000)
+ add r0.x, -r0.x, l(1.000000)
+ sqrt r0.x, r0.x
+ mad r0.xyz, r0.xxxx, v3.xyzx, r1.xyzx
+ dp3 r0.w, r0.xyzx, r0.xyzx
+ rsq r0.w, r0.w
+ mul o0.xyz, r0.wwww, r0.xyzx
+ mov o0.w, l(1.000000)
+ ret 
 // Approximately 0 instruction slots used
