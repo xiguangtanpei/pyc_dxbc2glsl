@@ -1,0 +1,1 @@
+ .\lua\lua.exe .\dxbc_reader.lua vs -o vs.text

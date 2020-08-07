@@ -1,0 +1,1 @@
+ .\mojoshader-compiler.exe -A .\test.vsh -o test.vsa

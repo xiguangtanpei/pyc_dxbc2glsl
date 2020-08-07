@@ -1,0 +1,5 @@
+I:\B\github_\pyc_dxbc2glsl\dxbc_reader\run_\run_\obj\Debug\run_.csproj.CoreCompileInputs.cache
+I:\B\github_\pyc_dxbc2glsl\dxbc_reader\run_\run_\bin\Debug\run_.exe
+I:\B\github_\pyc_dxbc2glsl\dxbc_reader\run_\run_\bin\Debug\run_.pdb
+I:\B\github_\pyc_dxbc2glsl\dxbc_reader\run_\run_\obj\Debug\run_.exe
+I:\B\github_\pyc_dxbc2glsl\dxbc_reader\run_\run_\obj\Debug\run_.pdb

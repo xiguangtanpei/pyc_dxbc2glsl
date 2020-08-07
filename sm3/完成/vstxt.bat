@@ -1,0 +1,1 @@
+.\testoutput.exe hlsl test.vsa > vs.txt

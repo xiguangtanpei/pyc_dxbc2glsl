@@ -1,0 +1,222 @@
+cbuffer main_Uniforms : register(b0)
+{
+	float4 uniforms_float4[20];
+};
+
+Texture2D s0_texture : register(t0);
+SamplerState s0 : register(s0);
+Texture2D s1_texture : register(t1);
+SamplerState s1 : register(s1);
+Texture2D s2_texture : register(t2);
+SamplerState s2 : register(s2);
+
+struct main_Input
+{
+	// This must match the vertex output!
+	// Rewrite at link time if needed!
+};
+
+struct main_Output
+{
+	float4 m_oC0 : SV_Target0;
+};
+
+main_Output main(main_Input input)
+{
+	main_Output output = (main_Output) 0;
+	const float4 c1 = float4(0.100000001, 3.0, 2.0, -10.0);
+	const float4 c3 = float4(0.075000003, -0.5, -0.25, -0.75);
+	const float4 c4 = float4(0.600000023, 0.298999992, 0.587000012, 0.114);
+	const float4 c5 = float4(0.000001, 2.200000047, 0.0, 0.0);
+	const float4 c6 = float4(-0.0001, 10000.0, 1.0, 0.0);
+	const float4 c7 = float4(1.0, 0.5, -0.49700001, -0.5);
+	const float4 c26 = float4(2.0, 0.0, 4.019999981, 1.0);
+	float4 r0;
+	float4 r1;
+	float4 r2;
+	float4 r3;
+	float4 r4;
+	float4 r5;
+	float4 r6;
+	float4 r7;
+	float4 r8;
+	float4 r9;
+	float4 r10;
+	#define c0 uniforms_float4[0]
+	#define c2 uniforms_float4[1]
+	#define c8 uniforms_float4[2]
+	#define c9 uniforms_float4[3]
+	#define c10 uniforms_float4[4]
+	#define c11 uniforms_float4[5]
+	#define c12 uniforms_float4[6]
+	#define c13 uniforms_float4[7]
+	#define c14 uniforms_float4[8]
+	#define c15 uniforms_float4[9]
+	#define c16 uniforms_float4[10]
+	#define c17 uniforms_float4[11]
+	#define c18 uniforms_float4[12]
+	#define c19 uniforms_float4[13]
+	#define c20 uniforms_float4[14]
+	#define c21 uniforms_float4[15]
+	#define c22 uniforms_float4[16]
+	#define c23 uniforms_float4[17]
+	#define c24 uniforms_float4[18]
+	#define c25 uniforms_float4[19]
+	#define v0 input.m_v0
+	#define v1 input.m_v1
+	#define v2 input.m_v2
+	#define v3 input.m_v3
+	#define oC0 output.m_oC0
+	#define FLT_MAX 1e38
+	r0.xyz = c0.xyz + v3.xyz;
+	r0.w = (r0.y * c1.z) + r0.z;
+	r0.w = r0.w + c1.w;
+	r1.x = max(-c1.z, r0.w);
+	r0.w = min(r1.x, c6.w);
+	r0.w = r0.w + c22.w;
+	r1.xy = r0.ww + c7.xy;
+	r1.x = saturate(r1.x);
+	r0.w = ((r1.y >= 0.0) ? r1.x : c7.y);
+	r1.z = c6.z;
+	r1.x = r1.z + -c16.w;
+	r1.x = (r1.x == 0.0) ? FLT_MAX : 1.0 / r1.x;
+	r2.xyz = -r0.xyz + c16.xyz;
+	r0.xyz = -r0.xyz + c0.xyz;
+	r3.xyz = normalize(r0.xyz);
+	r0.x = dot(r2.xyz, r2.xyz);
+	r0.x = (r0.x == 0.0) ? FLT_MAX : rsqrt(abs(r0.x));
+	r0.y = (r0.x == 0.0) ? FLT_MAX : 1.0 / r0.x;
+	r0.y = r0.y + c6.x;
+	r0.y = ((r0.y >= 0.0) ? r0.x : c6.y);
+	r2.xyz = (r2.xyz * r0.xxx) + -c18.xyz;
+	r0.x = saturate(r0.y * c15.w);
+	r0.y = (r0.x * r0.x) + -c16.w;
+	r4.xyz = r0.xxx * c15.xyz;
+	r1.y = c1.y;
+	r4.xyz = (r4.xyz * r1.yyy) + -c17.xyz;
+	r0.x = r1.x * r0.y;
+	r1.x = max(r0.x, c6.w);
+	r0.xyz = (r1.xxx * r2.xyz) + c18.xyz;
+	r2.xyz = normalize(r0.xyz);
+	r0.xyz = normalize(v0.xyz);
+	r1.y = dot(r2.xyz, r0.xyz);
+	r2.xyz = r2.xyz + r2.xyz;
+	r1.w = dot(r0.xyz, r3.xyz);
+	r2.w = r1.w * c23.x;
+	r1.w = -r1.w + c6.z;
+	r2.w = r1.y + abs(r2.w);
+	r2.w = r2.w + c6.z;
+	r0.w = r0.w * r2.w;
+	r5 = s2_texture.Sample(s2, v1.xy);
+	r0.w = r0.w * r5.y;
+	r0.w = r0.w * v2.x;
+	r6.z = c7.z;
+	r0.w = (c23.z * r0.w) + r6.z;
+	r4.xyz = (r1.xxx * r4.xyz) + c17.xyz;
+	r4.xyz = r4.xyz + r4.xyz;
+	r2.w = r1.x * c1.x;
+	r6.xyz = (r1.xxx * -r2.www) + c14.xyz;
+	r7 = s0_texture.Sample(s0, v1.xy);
+	r6.xyz = r6.xyz * r7.xyz;
+	r6.xyz = r6.xyz + r6.xyz;
+	r8.xyz = ((r0.w >= 0.0) ? r4.xyz : r6.xyz);
+	r4.xyz = r4.xyz * c19.xyz;
+	r0.w = r1.y + c1.x;
+	r0.w = abs(r0.w) + c6.z;
+	r0.w = r1.w * r0.w;
+	r0.w = (r0.w * c7.y) + c7.w;
+	r9 = s1_texture.Sample(s1, v1.xy);
+	r1.x = r9.w * c23.w;
+	r1.x = r1.x * c3.x;
+	r0.w = ((r0.w >= 0.0) ? r1.x : c6.w);
+	r8.xyz = r0.www + r8.xyz;
+	r10.xyz = r7.xyz + c7.yyy;
+	r7.xyz = r7.xyz * r9.xyz;
+	r6.xyz = r6.xyz * r10.xyz;
+	r6.xyz = (r6.xyz * c4.xxx) + -r8.xyz;
+	r10.xyz = r5.xxy + c3.zwy;
+	r0.w = ((r10.z >= 0.0) ? c26.x : c26.y);
+	r10.xy = saturate(r10.xy);
+	r0.w = r0.w + r1.y;
+	r1.x = (v2.x * -c26.z) + c26.w;
+	r0.w = r0.w + -r1.x;
+	r0.w = ((r0.w >= 0.0) ? c6.w : c6.z);
+	r1.x = r5.y + -c24.x;
+	r0.w = ((r1.x >= 0.0) ? r0.w : c6.z);
+	r0.w = saturate(r0.w * c24.y);
+	r6.xyz = (r0.www * r6.xyz) + r8.xyz;
+	r6.xyz = r9.xyz * r6.xyz;
+	r4.xyz = (r5.xxx * r4.xyz) + r6.xyz;
+	r0.w = r10.x * -c1.w;
+	r1.x = r10.y * c25.x;
+	r2.xyz = (r0.www * r3.xyz) + r2.xyz;
+	r3.xyz = normalize(r2.xyz);
+	r0.x = dot(r3.xyz, r0.xyz);
+	r0.y = r1.w * r1.w;
+	r0.y = r0.y * r0.y;
+	r0.y = r0.y * r1.w;
+	r0.y = r1.x * r0.y;
+	r0.z = v2.x * v2.x;
+	r0.z = r0.z * v2.x;
+	r0.x = (r0.z * r0.y) + abs(r0.x);
+	r0.x = r0.x * r0.x;
+	r0.x = r0.x * r0.x;
+	r0.y = -r5.z + c6.z;
+	r0.z = c24.z * v2.x;
+	r0.x = (r0.z * r0.x) + -r0.y;
+	r0.xyz = ((r0.x >= 0.0) ? r4.xyz : r6.xyz);
+	r1.xyw = c14.xyz + c14.xyz;
+	r1.xyw = (r1.xyw * r7.xyz) + -c13.xyz;
+	r1.xyw = (c13.www * r1.xyw) + c13.xyz;
+	r2.xyz = lerp(r1.xyw, r0.xyz, r5.www);
+	r0.x = dot(c4.yzw, r2.xyz);
+	r1.xyw = lerp(r0.xxx, r2.xyz, c25.yyy);
+	r0.xyz = c20.xyz;
+	r0.xyz = (r1.xyw * r0.xyz) + c21.xyz;
+	r1.xyw = max(abs(r0.xyz), c5.xxx);
+	r0.x = log2(r1.x);
+	r0.y = log2(r1.y);
+	r0.z = log2(r1.w);
+	r0.xyz = r0.xyz * c5.yyy;
+	r2.x = saturate(exp2(r0.x));
+	r2.y = saturate(exp2(r0.y));
+	r2.z = saturate(exp2(r0.z));
+	oC0.xyz = r2.xyz + c12.xyz;
+	r0.x = c9.w * v3.y;
+	r0.x = (c8.w * v3.x) + r0.x;
+	r0.x = (c10.w * v3.z) + r0.x;
+	r0.x = (c11.w * v3.w) + r0.x;
+	r0.x = (r0.x == 0.0) ? FLT_MAX : 1.0 / r0.x;
+	r0.y = r1.z + -c2.y;
+	oC0.w = (-c2.x * r0.x) + r0.y;
+	#undef c0
+	#undef c2
+	#undef c8
+	#undef c9
+	#undef c10
+	#undef c11
+	#undef c12
+	#undef c13
+	#undef c14
+	#undef c15
+	#undef c16
+	#undef c17
+	#undef c18
+	#undef c19
+	#undef c20
+	#undef c21
+	#undef c22
+	#undef c23
+	#undef c24
+	#undef c25
+	#undef v0
+	#undef v1
+	#undef v2
+	#undef v3
+	#undef oC0
+	return output;
+}
+
+
+
+

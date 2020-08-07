@@ -1,58 +1,33 @@
 class INPUT {
-	POSITION;
-	TEXCOORD1;
-	NORMAL;
-	TANGENT;
-	TEXCOORD2;
-}
-class OUT {
+	SV_POSITION;
 	TEXCOORD1;
 	TEXCOORD2;
 	TEXCOORD3;
 	TEXCOORD4;
 	TEXCOORD5;
-	SV_POSITION;
+}
+class OUT {
+	SV_Target;
 }
 void main(INPUT in) {
-	r0.x = dot(in.NORMAL.xyzx, in.NORMAL.xyzx);
-	r0.x = rsqrt(r0.x);
-	r0.xyz = r0.xxx * in.NORMAL.xyz;
-	r0.w = in.POSITION.w*32767.0 + 0.1;
-	r0.w = floor(r0.w) //ftou;
-	r1.xy = float2(3, 3)*r0.ww + float2(1, 2);
-	null = r0.w * r0.w;
-	r2.z = dot(cb11[r1.y + 8].xyzx, r0.xyzx);
-	r1.z = saturate(r2.z * cb11[7].z);
-	out.TEXCOORD0.w = saturate(r1.z + cb11[7].w);
-	r2.x = dot(cb11[r0.w + 8].xyzx, r0.xyzx);
-	r2.y = dot(cb11[r1.x + 8].xyzx, r0.xyzx);
-	out.TEXCOORD0.xyz = r2.xyz;
-	r0.x = dot(cb11[r0.w + 8].xyzx, in.TANGENT.xyzx);
-	r0.y = dot(cb11[r1.x + 8].xyzx, in.TANGENT.xyzx);
-	r0.z = dot(cb11[r1.y + 8].xyzx, in.TANGENT.xyzx);
-	out.TEXCOORD1.xyz = r0.xyz;
-	r3.xyz = in.POSITION.xyz*cb11[5].www + cb11[5].xyz;
-	out.TEXCOORD1.w = r3.z;
-	r4.xyz = r0.yzx * r2.zxy;
-	r0.xyz = r2.yzx*r0.zxy-r4.xyz;
-	out.TEXCOORD2.xyz = r0.xyz * in.TANGENT.www;
-	r0.xy = in.TEXCOORD1.xy*cb11[6].xy + cb11[6].zw;
-	out.TEXCOORD3.zw = r0.xy * in.TEXCOORD4.xy;
-	out.TEXCOORD3.xy = r0.xy;
-	r2.w = -cb12[7].x + cb11[r0.w + 8].w;
-	r2.xyz = cb11[r0.w + 8].xyz;
-	r3.w = 1.0;
-	r0.x = dot(r2.xyzw, r3.xyzw);
-	r2.w = -cb12[7].y + cb11[r1.x + 8].w;
-	r2.xyz = cb11[r1.x + 8].xyz;
-	r0.y = dot(r2.xyzw, r3.xyzw);
-	r2.w = -cb12[7].z + cb11[r1.y + 8].w;
-	r2.xyz = cb11[r1.y + 8].xyz;
-	r0.z = dot(r2.xyzw, r3.xyzw);
-	out.TEXCOORD4.xyz = r0.xyz + cb12[7].xyz;
-	r1.xyzw = r0.yyyy * cb12[1].xyzw;
-	r1.xyzw = cb12[0].xyzw*r0.xxxx + r1.xyzw;
-	r0.xyzw = cb12[2].xyzw*r0.zzzz + r1.xyzw;
-	out.SV_POSITION.xyzw = r0.xyzw + cb12[13].xyzw;
+	r0.xy = in.TEXCOORD1.xy*cb0[6].xy + cb0[6].zw;
+	r0.xyzw = tex2D(t0, r0.xy).xyzw //sample_state s0;
+	r0.xy = r0.wy*float2(2.0, 2.0) + float2(-1.0, -1.0);
+	r1.xyz = r0.yyy * in.TEXCOORD5.xyz;
+	r1.xyz = r0.xxx*in.TEXCOORD4.xyz + r1.xyz;
+	r0.x = dot(r0.xyxx, r0.xyxx);
+	r0.x = min(r0.x, 1.0);
+	r0.x = -r0.x + 1.0;
+	r0.x = sqrt(r0.x);
+	r0.xyz = r0.xxx*in.TEXCOORD3.xyz + r1.xyz;
+	r0.w = dot(r0.xyzx, r0.xyzx);
+	r0.w = rsqrt(r0.w);
+	r0.xyz = r0.www * r0.xyz;
+	r0.w = dot(cb1[0].xyzx, cb1[0].xyzx);
+	r0.w = rsqrt(r0.w);
+	r1.xyz = r0.www * cb1[0].xyz;
+	r0.x = dot(r1.xyzx, r0.xyzx);
+	out.SV_Target.xyz = max(r0.xxx, float3(0.0, 0.0, 0.0));
+	out.SV_Target.w = 1.0;
 	return;
 }
