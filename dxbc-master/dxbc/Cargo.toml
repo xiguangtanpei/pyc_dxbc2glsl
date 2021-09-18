@@ -1,0 +1,10 @@
+[package]
+name = "dxbc"
+version = "0.1.0"
+authors = ["Felix Kaaman <trundmatu@gmail.com>"]
+
+[dependencies]
+byteorder = "1"
+bitflags = "1"
+term = "0.5"
+md5 = "0.3"

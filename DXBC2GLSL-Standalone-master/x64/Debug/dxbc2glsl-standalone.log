@@ -1,0 +1,10 @@
+﻿  Utils.cpp
+  ShaderParse.cpp
+  ShaderDefs.cpp
+  GLSLGen.cpp
+  DXBCParse.cpp
+  DXBC2GLSLCmd.cpp
+  DXBC2GLSL.cpp
+  正在生成代码...
+  dxbc2glsl-standalone.vcxproj -> I:\B\github_\pyc_dxbc2glsl\DXBC2GLSL-Standalone-master\x64\Debug\dxbc2glsl-standalone.exe
+  dxbc2glsl-standalone.vcxproj -> I:\B\github_\pyc_dxbc2glsl\DXBC2GLSL-Standalone-master\x64\Debug\dxbc2glsl-standalone.pdb (Full PDB)

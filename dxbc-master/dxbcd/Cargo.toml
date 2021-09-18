@@ -1,0 +1,8 @@
+[package]
+name = "dxbcd"
+version = "0.1.0"
+authors = ["Felix Kaaman <trundmatu@gmail.com>"]
+
+[dependencies]
+dxbc = { path = "../dxbc" }
+term = "0.5"

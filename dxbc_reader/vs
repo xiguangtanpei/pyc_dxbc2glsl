@@ -6,49 +6,121 @@
 //
 // Name                 Index   Mask Register SysValue  Format   Used
 // -------------------- ----- ------ -------- -------- ------- ------
-// SV_POSITION              0   xyzw        0      POS   float       
-// TEXCOORD                 0   xy          1     NONE   float   xy  
-// TEXCOORD                 1   xyzw        2     NONE   float       
-// TEXCOORD                 2   xyz         3     NONE   float   xyz 
-// TEXCOORD                 3   xyz         4     NONE   float   xyz 
-// TEXCOORD                 4   xyz         5     NONE   float   xyz 
+// TEXCOORD                 0   xyzw        0     NONE   float   xyzw
+// TEXCOORD                 1   xyzw        1     NONE    uint   x   
+// TEXCOORD                 2   xyzw        2     NONE   float   xyz 
+// TEXCOORD                 3   xyzw        3     NONE   float   xyz 
+// TEXCOORD                 4   xyzw        4     NONE   float   xyzw
+// TEXCOORD                 5   xy          5     NONE   float   xy  
+// SV_InstanceID            0   x           6   INSTID    uint   x   
 //
 //
 // Output signature:
 //
 // Name                 Index   Mask Register SysValue  Format   Used
 // -------------------- ----- ------ -------- -------- ------- ------
-// SV_Target                0   xyzw        0   TARGET   float   xyzw
+// SV_Position              0   xyzw        0      POS   float   xyzw
+// TEXCOORD                 0   xyzw        1     NONE   float   xyzw
+// TEXCOORD                 1   xyzw        2     NONE   float   xyzw
+// TEXCOORD                 2   xyzw        3     NONE   float   xyzw
+// TEXCOORD                 3   xyzw        4     NONE   float   xyzw
+// TEXCOORD                 4   xyzw        5     NONE   float   xyzw
+// TEXCOORD                 5   xyzw        6     NONE   float   xyzw
 //
- ps_4_0
- dcl_constantbuffer CB0[7], immediateIndexed
- dcl_constantbuffer CB1[1], immediateIndexed
- dcl_sampler s0, mode_default
- dcl_resource_texture2d (float,float,float,float) t0
- dcl_input_ps linear v1.xy
- dcl_input_ps linear v3.xyz
- dcl_input_ps linear v4.xyz
- dcl_input_ps linear v5.xyz
- dcl_output o0.xyzw
- dcl_temps 2
- mad r0.xy, v1.xyxx, cb0[6].xyxx, cb0[6].zwzz
- sample r0.xyzw, r0.xyxx, t0.xyzw, s0
- mad r0.xy, r0.wyww, l(2.000000, 2.000000, 0.000000, 0.000000), l(-1.000000, -1.000000, 0.000000, 0.000000)
- mul r1.xyz, r0.yyyy, v5.xyzx
- mad r1.xyz, r0.xxxx, v4.xyzx, r1.xyzx
- dp2 r0.x, r0.xyxx, r0.xyxx
- min r0.x, r0.x, l(1.000000)
- add r0.x, -r0.x, l(1.000000)
- sqrt r0.x, r0.x
- mad r0.xyz, r0.xxxx, v3.xyzx, r1.xyzx
- dp3 r0.w, r0.xyzx, r0.xyzx
- rsq r0.w, r0.w
- mul r0.xyz, r0.wwww, r0.xyzx
- dp3 r0.w, cb1[0].xyzx, cb1[0].xyzx
- rsq r0.w, r0.w
- mul r1.xyz, r0.wwww, cb1[0].xyzx
- dp3 r0.x, r1.xyzx, r0.xyzx
- max o0.xyz, r0.xxxx, l(0.000000, 0.000000, 0.000000, 0.000000)
- mov o0.w, l(1.000000)
- ret 
+vs_5_0
+dcl_globalFlags refactoringAllowed
+dcl_constantbuffer CB0[1], immediateIndexed
+dcl_constantbuffer CB2[38], immediateIndexed
+dcl_resource_buffer (float,float,float,float) t0
+dcl_resource_structured t2, 16
+dcl_input v0.xyzw
+dcl_input v1.x
+dcl_input v2.xyz
+dcl_input v3.xyz
+dcl_input v4.xyzw
+dcl_input v5.xy
+dcl_input_sgv v6.x, instance_id
+dcl_output_siv o0.xyzw, position
+dcl_output o1.xyzw
+dcl_output o2.xyzw
+dcl_output o3.xyzw
+dcl_output o4.xyzw
+dcl_output o5.xyzw
+dcl_output o6.xyzw
+dcl_temps 7
+and r0.xy, v1.xxxx, l(0x00008000, 0x00007fff, 0, 0)
+imad r0.z, v6.x, cb0[0].y, cb0[0].x
+iadd r0.w, r0.z, l(5)
+ld_indexable(buffer)(float,float,float,float) r1.xy, r0.wwww, t0.xzyw
+ieq r2.x, r0.x, l(0)
+ine r2.y, r0.x, l(0)
+and r0.xw, r1.xxxy, r2.xxxy
+or r0.x, r0.w, r0.x
+iadd r0.x, r0.y, r0.x
+ld_structured_indexable(structured_buffer, stride=16)(mixed,mixed,mixed,mixed) r0.x, r0.x, l(0), t2.xxxx
+lt r0.x, l(0.000000), r0.x
+if_nz r0.x
+  mul r0.xyw, v2.zxzy, -v3.yzyx
+  mad r0.xyw, v2.yzyx, -v3.zxzy, -r0.xyxw
+  mul r0.xyw, r0.xyxw, v0.wwww
+  iadd r1.xyzw, r0.zzzz, l(2, 3, 4, 1)
+  ld_indexable(buffer)(float,float,float,float) r2.xyzw, r1.xxxx, t0.xyzw
+  ld_indexable(buffer)(float,float,float,float) r3.xyzw, r1.yyyy, t0.xyzw
+  ld_indexable(buffer)(float,float,float,float) r4.xyzw, r1.zzzz, t0.xyzw
+  mov r5.xyz, v0.xyzx
+  mov r5.w, l(1.000000)
+  dp4 r1.x, r5.xyzw, r2.xyzw
+  dp4 r1.y, r5.xyzw, r3.xyzw
+  dp4 r1.z, r5.xyzw, r4.xyzw
+  dp3 r5.x, v2.xyzx, r2.xyzx
+  dp3 r5.y, v2.xyzx, r3.xyzx
+  dp3 r5.z, v2.xyzx, r4.xyzx
+  dp3 r6.x, r0.xywx, r2.xyzx
+  dp3 r6.y, r0.xywx, r3.xyzx
+  dp3 r6.z, r0.xywx, r4.xyzx
+  dp3 r2.x, -v3.xyzx, r2.xyzx
+  dp3 r2.y, -v3.xyzx, r3.xyzx
+  dp3 r2.z, -v3.xyzx, r4.xyzx
+  dp3 r0.x, r5.xyzx, r5.xyzx
+  rsq r0.x, r0.x
+  mul r0.xyw, r0.xxxx, r5.xyxz
+  dp3 r2.w, r6.xyzx, r6.xyzx
+  rsq r2.w, r2.w
+  mul r3.xyz, r2.wwww, r6.xyzx
+  dp3 r2.w, r2.xyzx, r2.xyzx
+  rsq r2.w, r2.w
+  mul r2.xyz, r2.wwww, r2.xyzx
+  add r4.xyz, r1.xyzx, -cb2[37].xyzx
+  mov r4.w, l(1.000000)
+  dp4 o0.x, r4.xyzw, cb2[14].xyzw
+  dp4 o0.y, r4.xyzw, cb2[15].xyzw
+  dp4 o0.z, r4.xyzw, cb2[16].xyzw
+  dp4 o0.w, r4.xyzw, cb2[17].xyzw
+  ld_indexable(buffer)(float,float,float,float) o1.xyzw, r0.zzzz, t0.xyzw
+  ld_indexable(buffer)(float,float,float,float) r4.xy, r1.wwww, t0.xyzw
+  mov o2.w, v5.x
+  mov o2.xyz, r1.xyzx
+  mov o3.x, r2.x
+  mov o3.y, r3.x
+  mov o3.z, r0.x
+  mov o3.w, v5.y
+  mov o4.x, r2.y
+  mov o4.y, r3.y
+  mov o4.z, r0.y
+  mov o4.w, r4.x
+  mov o5.x, r2.z
+  mov o5.y, r3.z
+  mov o5.z, r0.w
+  mov o5.w, r4.y
+  mov o6.xyzw, v4.xyzw
+else 
+  mov o0.xyzw, l(0,0,0,0)
+  mov o1.xyzw, l(0,0,0,0)
+  mov o2.xyzw, l(0,0,0,0)
+  mov o3.xyzw, l(0,0,0,0)
+  mov o4.xyzw, l(0,0,0,0)
+  mov o5.xyzw, l(0,0,0,0)
+  mov o6.xyzw, l(0,0,0,0)
+endif 
+ret 
 // Approximately 0 instruction slots used

@@ -1,0 +1,15 @@
+[package]
+name = "dxbcross"
+version = "0.1.0"
+authors = ["Felix Kaaman <trundmatu@gmail.com>"]
+
+[dependencies]
+bitflags = "1"
+byteorder = "1"
+rspirv = "0.5"
+spirv_headers = "1.3"
+dxbc = { path = "../dxbc" }
+
+[dev-dependencies]
+pretty-hex = "0.1"
+rspirv = "0.5"
